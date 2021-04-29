@@ -26,7 +26,25 @@ class PostController extends \Core\Controller
 
     public function createPageAction()
     {
-        View::renderTemplate('Post/createform.html', []);
+        //print_r($this->request);exit;
+        $id = $this->request->id;
+        $data = [];
+        
+        if($id) {
+            $post = Post::get(['id'=>$id]);
+            $data['data'] = $post;
+        }
+        View::renderTemplate('Post/form.html', $data);
+    }
+
+    public function updatePageAction()
+    {
+        $id = $this->request->id;
+        
+        $data = Post::get(['id'=>$id]);
+        View::renderTemplate('Post/form.html', [
+            'data' => $data
+        ]);
     }
 
     public function createAction()
@@ -34,19 +52,33 @@ class PostController extends \Core\Controller
         
         if ($this->request->submit) {
             $status = false;
-            $message = 'Unable To Create';
+            $message = 'Unable To Create/Update';
             $title = filter_var($this->request->title, FILTER_SANITIZE_STRING);
             $description = filter_var($this->request->description, FILTER_SANITIZE_STRING);
+            $id = $this->request->id;
+
             $arr = [
                 'title' => $title,
                 'description' => $description
             ];
-            $query = Post::createPost($arr);
+
+            if ($id) {
+                $query = Post::updatePost(['id'=>$id], $arr);
+                $message = 'Updated';
+            } else {
+                $query = Post::createPost($arr);
+                $message = 'Created';
+            }
+            
             
             if ($query) {
                 $status = true;
-                $message = 'Successfully Created';
-            } 
+                $message = "Successfully {$message}";
+            } else {
+                $status = false;
+                $message = "Unable to {$message}";
+            }
+
             $data = [
                 'status' => $status,
                 'msg' => $message

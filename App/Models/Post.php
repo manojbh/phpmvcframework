@@ -23,13 +23,35 @@ class Post extends \Core\Model
     }
 
     /**
-     * Get single post
+     * Create post
      *
      * @return array
      */
     public static function createPost($request)
     {
         return static::getInstance()->insert('posts', $request);
+        
+    }
+
+    /**
+     * Update post
+     *
+     * @return array
+     */
+    public static function updatePost($condition, $fields)
+    {
+        return static::getInstance()->update('posts', $condition, $fields);
+        
+    }
+
+    /**
+     * Get filtered post
+     *
+     * @return array
+     */
+    public static function get($request)
+    {
+        return static::getInstance()->find('posts', $request);
         
     }
 }

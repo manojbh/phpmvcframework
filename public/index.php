@@ -24,6 +24,7 @@ $router->add('posts', ['controller' => 'PostController', 'action' => 'index']);
 $router->add('post/create', ['controller' => 'PostController', 'action' => 'createPage']);
 $router->add('post/createPost', ['controller' => 'PostController', 'action' => 'create']);
 
+// $router->add('post/', ['controller' => 'PostController', 'action' => 'createPage']);
 $router->add('{controller}/{action}');
 
 // echo '<pre>';
