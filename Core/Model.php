@@ -23,7 +23,7 @@ class Model
         return self::$_instance;
     }
 
-    public function insert($table, $fields = [])
+    public function insert(string $table, array $fields = []): int
     {
         if (count($fields) > 0) {
             $sql = "INSERT INTO ${table} ";
@@ -49,7 +49,7 @@ class Model
         return null;
     }
 
-    public function update($table, $condition = [], $fields = [])
+    public function update(string $table, array $condition = [], array $fields = []): int
     {
         $sql = "UPDATE ${table} SET ";
         $first = true;
@@ -76,7 +76,7 @@ class Model
         return $query->rowCount();
     }
 
-    public function delete($table, $condition = [])
+    public function delete(string $table, array $condition = []): int
     {
         $sql = "DELETE FROM ${table} WHERE 1" . $this->formatCondition($condition);
         $query = $this->_db->prepare($sql);
@@ -86,7 +86,7 @@ class Model
         return $query->rowCount();
     }
 
-    public function find($table, $condition = [])
+    public function find(string $table, array $condition = []): array
     {
         $sql = "SELECT * FROM  ${table} WHERE 1" . $this->formatCondition($condition);
         $query = $this->_db->prepare($sql);
@@ -96,7 +96,7 @@ class Model
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public function findIn($table, $value, $array)
+    public function findIn(string $table, string $value, array $array)
     {
         $sql = "SELECT * FROM ${table} WHERE ${value} IN ";
         $sql .= '(' . implode(
@@ -113,7 +113,7 @@ class Model
         return $query->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    private function formatCondition($condition = [])
+    private function formatCondition(array $condition = [])
     {
         $sql = '';
         foreach ($condition as $p => $v) {
@@ -123,7 +123,7 @@ class Model
         return $sql;
     }
 
-    private function bindCondition(&$query, $condition = [])
+    private function bindCondition(&$query, array $condition = [])
     {
         foreach ($condition as $p => $v) {
             $query->bindValue(":cond_${p}", $v);
